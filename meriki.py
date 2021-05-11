@@ -1,10 +1,13 @@
+#!/usr/bin/python3.8
+
 import requests
 import meraki
+import json
+from pprint import pprint
 
-# version = v1
 
-
-url='https://api.meraki.com/api/v1/organizations'
+version = "v1"
+url='https://api.meraki.com/api/'+ version + '/organizations'
 
 querystring= {}
 header ={
@@ -13,13 +16,17 @@ header ={
 
 response = requests.request("GET", url, headers=header)
 print(response)
+print("\n")
 print(response.text.encode('utf8'))
+print("\n")
 
+# add json and pprint
+responseJSON = json.loads(response.text)
+pprint(responseJSON,indent=1,width=5)
+print("\n")
 
+#iterate
 
-#dashboard = meraki.DashboardAPI()
-
-
-# curl --request GET -L \
-#  --url https://api.meraki.com/api/v0/organizations \
-# --header 'X-Cisco-Meraki-API-Key: 6bec40cf957de430a6f1f2baa056b99a4fac9ea0'
+return_information = json.loads(response.text)
+for x in return_information:
+    print("ID: {} \nName: {} \nURL:{}\n ".format(x["id"],x["name"],x["url"]))
